@@ -9,15 +9,19 @@ import { Stage } from './components/Stage'
 import { useCamera } from './hooks/useCamera'
 import { useImageFile } from './hooks/useImageFile'
 import { useOverlayGestures } from './hooks/useOverlayGestures'
-import { useOverlaySettings } from './hooks/useOverlaySettings'
+import { usePersistedSettings } from './hooks/usePersistedSettings'
+import { useSettings } from './hooks/useSettings'
+import { useWakeLock } from './hooks/useWakeLock'
 
 export default function App() {
-  const camera = useCamera()
+  const { settings, actions } = useSettings()
+  const settingsLoaded = usePersistedSettings(settings, actions.hydrate)
+  const camera = useCamera({ lens: settings.lens, enabled: settingsLoaded })
   const image = useImageFile()
-  const { settings, actions } = useOverlaySettings()
   const [controlsHidden, setControlsHidden] = useState(false)
   const stageRef = useRef<HTMLDivElement>(null)
 
+  useWakeLock()
   useOverlayGestures({
     targetRef: stageRef,
     transform: settings.transform,
@@ -35,10 +39,10 @@ export default function App() {
     <main className={styles.app}>
       <div className={styles.viewport}>
         <Stage ref={stageRef}>
-          {camera.status === 'ready' ? (
-            <CameraView stream={camera.stream} />
+          {camera.state.status === 'ready' ? (
+            <CameraView stream={camera.state.stream} />
           ) : (
-            <CameraMessage state={camera} />
+            <CameraMessage state={camera.state} />
           )}
           {image.src && (
             <OverlayImage
@@ -46,6 +50,7 @@ export default function App() {
               opacity={settings.opacity}
               transform={settings.transform}
               flipped={settings.flipped}
+              grayscale={settings.grayscale}
             />
           )}
         </Stage>
@@ -55,13 +60,10 @@ export default function App() {
       ) : (
         <OverlayControls
           settings={settings}
+          actions={actions}
           hasImage={Boolean(image.src)}
+          availableLenses={camera.availableLenses}
           onPickImage={pickImage}
-          onOpacityChange={actions.setOpacity}
-          onToggleFlipped={actions.toggleFlipped}
-          onResetTransform={actions.resetTransform}
-          onToggleRotationLocked={actions.toggleRotationLocked}
-          onToggleLocked={actions.toggleLocked}
           onHide={() => setControlsHidden(true)}
         />
       )}

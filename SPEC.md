@@ -16,6 +16,7 @@ fica sobreposta com opacidade ajustável. Uso pessoal, custo zero, sem App Store
 - R1. Câmera traseira em tempo real, mostrando o **quadro inteiro** (sem cortar laterais;
   `object-fit: contain`). A faixa livre embaixo abriga a barra de controles.
 - R2. Botão alterna entre as lentes traseiras disponíveis (1x ↔ 0.5x); a escolha é lembrada.
+  Câmeras virtuais "Dupla/Tripla" são ignoradas (trocam de lente sozinhas e desalinhariam a imagem).
 - R3. Ao voltar do segundo plano, a câmera religa sozinha.
 - R4. Mensagem clara se a permissão da câmera for negada.
 
@@ -30,7 +31,9 @@ fica sobreposta com opacidade ajustável. Uso pessoal, custo zero, sem App Store
 - R10. Modo preto e branco (liga/desliga).
 
 ### Interface
-- R11. Barra inferior: slider de opacidade + botões (imagem · P&B · espelhar · lente · travar · esconder).
+- R11. Barra inferior: slider de opacidade + duas linhas de 4 botões
+  (imagem · P&B · espelhar · lente / centro · sem giro · travar · esconder).
+  Travado, ficam bloqueados só os que mexem no alinhamento; opacidade, P&B e esconder seguem livres.
 - R12. Esconder controles: tela limpa; um toque traz a barra de volta.
 - R13. Somente retrato.
 
@@ -39,6 +42,7 @@ fica sobreposta com opacidade ajustável. Uso pessoal, custo zero, sem App Store
   P&B e lente — localmente (IndexedDB), sem servidor. Ao reabrir, tudo é restaurado.
 - R15. Tela sempre acesa enquanto o app está aberto (Wake Lock API).
 - R16. PWA: nome "Decalque", ícone de lápis, abre em tela cheia pela tela de início.
+  Sem service worker (não precisa funcionar offline; evita versões presas em cache).
 
 ### Fora de escopo (por enquanto)
 - Modo "só contornos" (detecção de bordas) e cor das linhas.
@@ -60,23 +64,32 @@ Princípios: componentes pequenos e com uma responsabilidade; lógica de navegad
 ```
 src/
   main.tsx
-  App.tsx                    # composição e estado de alto nível
-  types.ts                   # OverlaySettings, Transform, etc.
+  App.tsx                      # só composição
+  types.ts                     # Settings, OverlayTransform, Lens
   components/
-    CameraView.tsx           # <video> da câmera
-    OverlayImage.tsx         # imagem sobreposta + transform + gestos
-    ControlBar.tsx           # barra inferior (layout)
+    Stage.tsx                  # palco 3:4 (container das coordenadas)
+    CameraView.tsx             # <video> da câmera
+    CameraMessage.tsx          # carregando / sem permissão / erro
+    OverlayImage.tsx           # imagem sobreposta (transform, opacidade, P&B)
+    OverlayControls.tsx        # monta a barra com os botões
+    ControlBar.tsx             # layout da barra
     OpacitySlider.tsx
-    ImagePickerButton.tsx
     IconButton.tsx
-    CameraError.tsx
+    ImagePickerButton.tsx
+    LensButton.tsx
+    ShowControlsLayer.tsx      # toque para trazer a barra de volta
+    icons.tsx
   hooks/
-    useCamera.ts             # getUserMedia, troca de lente, religar ao voltar
-    useOverlayGestures.ts    # mover/pinça/girar via @use-gesture
-    usePersistedSettings.ts  # carrega/salva no IndexedDB
-    useWakeLock.ts
+    useSettings.ts             # estado dos ajustes (reducer)
+    usePersistedSettings.ts    # restaura/salva ajustes no IndexedDB
+    useImageFile.ts            # imagem atual + persistência
+    useCamera.ts               # abre a câmera na lente pedida
+    useRestartWhenStale.ts     # religa a câmera ao voltar do segundo plano
+    useOverlayGestures.ts      # arrastar / pinça / giro
+    useWakeLock.ts             # tela sempre acesa
   lib/
-    storage.ts               # acesso ao IndexedDB
+    camera.ts                  # getUserMedia, detecção de lentes
+    storage.ts                 # chave-valor sobre IndexedDB
 ```
 
 ## Entregas

@@ -1,32 +1,39 @@
-import type { OverlaySettings } from '../types'
+import type { SettingsActions } from '../hooks/useSettings'
+import type { Lens, Settings } from '../types'
 import { ControlBar } from './ControlBar'
 import { IconButton } from './IconButton'
-import { CenterIcon, FlipIcon, HideIcon, LockIcon, RotateIcon, UnlockIcon } from './icons'
+import {
+  CenterIcon,
+  FlipIcon,
+  GrayscaleIcon,
+  HideIcon,
+  LockIcon,
+  RotateIcon,
+  UnlockIcon,
+} from './icons'
 import { ImagePickerButton } from './ImagePickerButton'
+import { LensButton } from './LensButton'
 import { OpacitySlider } from './OpacitySlider'
 
 type Props = {
-  settings: OverlaySettings
+  settings: Settings
+  actions: SettingsActions
   hasImage: boolean
+  availableLenses: Lens[]
   onPickImage: (file: File) => void
-  onOpacityChange: (opacity: number) => void
-  onToggleFlipped: () => void
-  onResetTransform: () => void
-  onToggleRotationLocked: () => void
-  onToggleLocked: () => void
   onHide: () => void
 }
 
-/** Barra inferior. Travado, só a opacidade e o esconder continuam ativos. */
+/**
+ * Barra inferior. Travado, fica bloqueado só o que mexe no alinhamento
+ * (imagem, lente, espelhar, centro, giro); opacidade e P&B continuam livres.
+ */
 export function OverlayControls({
   settings,
+  actions,
   hasImage,
+  availableLenses,
   onPickImage,
-  onOpacityChange,
-  onToggleFlipped,
-  onResetTransform,
-  onToggleRotationLocked,
-  onToggleLocked,
   onHide,
 }: Props) {
   const { locked } = settings
@@ -34,34 +41,47 @@ export function OverlayControls({
 
   return (
     <ControlBar
-      slider={<OpacitySlider value={settings.opacity} onChange={onOpacityChange} />}
+      slider={<OpacitySlider value={settings.opacity} onChange={actions.setOpacity} />}
       actions={
         <>
           <ImagePickerButton onPick={onPickImage} disabled={locked} />
           <IconButton
+            icon={<GrayscaleIcon />}
+            label="P&B"
+            onClick={() => actions.toggle('grayscale')}
+            pressed={settings.grayscale}
+            disabled={!hasImage}
+          />
+          <IconButton
             icon={<FlipIcon />}
             label="Espelhar"
-            onClick={onToggleFlipped}
+            onClick={() => actions.toggle('flipped')}
             pressed={settings.flipped}
             disabled={!canAdjust}
+          />
+          <LensButton
+            lens={settings.lens}
+            available={availableLenses}
+            onChange={actions.setLens}
+            disabled={locked}
           />
           <IconButton
             icon={<CenterIcon />}
             label="Centro"
-            onClick={onResetTransform}
+            onClick={actions.resetTransform}
             disabled={!canAdjust}
           />
           <IconButton
             icon={<RotateIcon />}
             label="Sem giro"
-            onClick={onToggleRotationLocked}
+            onClick={() => actions.toggle('rotationLocked')}
             pressed={settings.rotationLocked}
             disabled={!canAdjust}
           />
           <IconButton
             icon={locked ? <LockIcon /> : <UnlockIcon />}
             label={locked ? 'Travado' : 'Travar'}
-            onClick={onToggleLocked}
+            onClick={() => actions.toggle('locked')}
             pressed={locked}
             disabled={!hasImage}
           />

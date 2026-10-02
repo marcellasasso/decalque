@@ -10,11 +10,16 @@ export type OverlayTransform = {
   rotation: number
 }
 
-export type OverlaySettings = {
+/** Lente traseira: principal (1x) ou ultra-angular (0.5x). */
+export type Lens = 'wide' | 'ultraWide'
+
+export type Settings = {
   opacity: number
   transform: OverlayTransform
   flipped: boolean
+  grayscale: boolean
   /** Pinça só redimensiona, sem girar. */
   rotationLocked: boolean
   locked: boolean
+  lens: Lens
 }

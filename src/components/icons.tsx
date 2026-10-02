@@ -62,6 +62,20 @@ export const RotateIcon = () => (
   </Icon>
 )
 
+export const GrayscaleIcon = () => (
+  <Icon>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor" />
+  </Icon>
+)
+
+export const CameraIcon = () => (
+  <Icon>
+    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z" />
+    <circle cx="12" cy="13" r="3" />
+  </Icon>
+)
+
 export const HideIcon = () => (
   <Icon>
     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />

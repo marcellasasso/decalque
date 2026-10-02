@@ -7,6 +7,7 @@ type Props = {
   opacity: number
   transform: OverlayTransform
   flipped: boolean
+  grayscale: boolean
 }
 
 function toCssTransform({ x, y, scale, rotation }: OverlayTransform, flipped: boolean): string {
@@ -19,7 +20,11 @@ function toCssTransform({ x, y, scale, rotation }: OverlayTransform, flipped: bo
   ].join(' ')
 }
 
-export function OverlayImage({ src, opacity, transform, flipped }: Props) {
-  const style: CSSProperties = { opacity, transform: toCssTransform(transform, flipped) }
+export function OverlayImage({ src, opacity, transform, flipped, grayscale }: Props) {
+  const style: CSSProperties = {
+    opacity,
+    transform: toCssTransform(transform, flipped),
+    filter: grayscale ? 'grayscale(1)' : undefined,
+  }
   return <img className={styles.image} src={src} alt="" style={style} draggable={false} />
 }
