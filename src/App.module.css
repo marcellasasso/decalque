@@ -1,0 +1,12 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+}
+
+.viewport {
+  flex: 1;
+  min-height: 0;
+  container-type: size;
+}

@@ -1,0 +1,9 @@
+.stage {
+  position: relative;
+  /* Maior retângulo 3:4 que cabe no container (ver .viewport em App). */
+  width: min(100cqw, 75cqh);
+  aspect-ratio: 3 / 4;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #000;
+}

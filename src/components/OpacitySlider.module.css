@@ -1,0 +1,22 @@
+.slider {
+  display: grid;
+  grid-template-columns: auto 1fr 3.5ch;
+  align-items: center;
+  gap: var(--gap);
+  min-height: var(--tap);
+}
+
+.slider input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
