@@ -1,8 +1,13 @@
 .bar {
   display: flex;
   flex-direction: column;
-  gap: var(--gap);
-  padding: 16px max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom))
+  gap: 8px;
+  padding: 8px max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom))
     max(16px, env(safe-area-inset-left));
   background: var(--surface);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
 }

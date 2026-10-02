@@ -6,4 +6,6 @@
   margin: 0 auto;
   overflow: hidden;
   background: #000;
+  /* Filhos usam cqw para medir em relação à largura do palco. */
+  container-type: inline-size;
 }
