@@ -1,7 +1,7 @@
 import type { OverlaySettings } from '../types'
 import { ControlBar } from './ControlBar'
 import { IconButton } from './IconButton'
-import { FlipIcon, HideIcon, LockIcon, ResetIcon, UnlockIcon } from './icons'
+import { CenterIcon, FlipIcon, HideIcon, LockIcon, RotateIcon, UnlockIcon } from './icons'
 import { ImagePickerButton } from './ImagePickerButton'
 import { OpacitySlider } from './OpacitySlider'
 
@@ -12,6 +12,7 @@ type Props = {
   onOpacityChange: (opacity: number) => void
   onToggleFlipped: () => void
   onResetTransform: () => void
+  onToggleRotationLocked: () => void
   onToggleLocked: () => void
   onHide: () => void
 }
@@ -24,6 +25,7 @@ export function OverlayControls({
   onOpacityChange,
   onToggleFlipped,
   onResetTransform,
+  onToggleRotationLocked,
   onToggleLocked,
   onHide,
 }: Props) {
@@ -44,9 +46,16 @@ export function OverlayControls({
             disabled={!canAdjust}
           />
           <IconButton
-            icon={<ResetIcon />}
-            label="Centralizar"
+            icon={<CenterIcon />}
+            label="Centro"
             onClick={onResetTransform}
+            disabled={!canAdjust}
+          />
+          <IconButton
+            icon={<RotateIcon />}
+            label="Sem giro"
+            onClick={onToggleRotationLocked}
+            pressed={settings.rotationLocked}
             disabled={!canAdjust}
           />
           <IconButton

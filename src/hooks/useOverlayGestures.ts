@@ -11,10 +11,18 @@ type Options = {
   transform: OverlayTransform
   onChange: (patch: Partial<OverlayTransform>) => void
   enabled: boolean
+  /** Ignora o giro da pinça, mantendo o ângulo atual. */
+  rotationLocked: boolean
 }
 
 /** Arrastar com um dedo move; pinça redimensiona e gira. Ouve o palco inteiro. */
-export function useOverlayGestures({ targetRef, transform, onChange, enabled }: Options) {
+export function useOverlayGestures({
+  targetRef,
+  transform,
+  onChange,
+  enabled,
+  rotationLocked,
+}: Options) {
   // Os gestos leem o valor atual só quando começam.
   const transformRef = useRef(transform)
   useEffect(() => {
@@ -44,7 +52,8 @@ export function useOverlayGestures({ targetRef, transform, onChange, enabled }: 
         const width = stageWidth()
         onChange({ x: x / width, y: y / width })
       },
-      onPinch: ({ offset: [scale, rotation] }) => onChange({ scale, rotation }),
+      onPinch: ({ offset: [scale, rotation] }) =>
+        onChange(rotationLocked ? { scale } : { scale, rotation }),
     },
     {
       target: targetRef,

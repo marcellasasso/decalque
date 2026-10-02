@@ -7,6 +7,7 @@ const INITIAL_SETTINGS: OverlaySettings = {
   opacity: 0.5,
   transform: INITIAL_TRANSFORM,
   flipped: false,
+  rotationLocked: false,
   locked: false,
 }
 
@@ -15,6 +16,7 @@ type Action =
   | { type: 'updateTransform'; patch: Partial<OverlayTransform> }
   | { type: 'resetTransform' }
   | { type: 'toggleFlipped' }
+  | { type: 'toggleRotationLocked' }
   | { type: 'toggleLocked' }
 
 function reducer(state: OverlaySettings, action: Action): OverlaySettings {
@@ -27,6 +29,8 @@ function reducer(state: OverlaySettings, action: Action): OverlaySettings {
       return { ...state, transform: INITIAL_TRANSFORM, flipped: false }
     case 'toggleFlipped':
       return { ...state, flipped: !state.flipped }
+    case 'toggleRotationLocked':
+      return { ...state, rotationLocked: !state.rotationLocked }
     case 'toggleLocked':
       return { ...state, locked: !state.locked }
   }
@@ -47,6 +51,7 @@ export function useOverlaySettings() {
       updateTransform,
       resetTransform: () => dispatch({ type: 'resetTransform' }),
       toggleFlipped: () => dispatch({ type: 'toggleFlipped' }),
+      toggleRotationLocked: () => dispatch({ type: 'toggleRotationLocked' }),
       toggleLocked: () => dispatch({ type: 'toggleLocked' }),
     }),
     [setOpacity, updateTransform],

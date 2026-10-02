@@ -23,6 +23,7 @@ export default function App() {
     transform: settings.transform,
     onChange: actions.updateTransform,
     enabled: Boolean(image.src) && !settings.locked,
+    rotationLocked: settings.rotationLocked,
   })
 
   const pickImage = (file: File) => {
@@ -59,6 +60,7 @@ export default function App() {
           onOpacityChange={actions.setOpacity}
           onToggleFlipped={actions.toggleFlipped}
           onResetTransform={actions.resetTransform}
+          onToggleRotationLocked={actions.toggleRotationLocked}
           onToggleLocked={actions.toggleLocked}
           onHide={() => setControlsHidden(true)}
         />

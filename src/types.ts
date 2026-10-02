@@ -14,5 +14,7 @@ export type OverlaySettings = {
   opacity: number
   transform: OverlayTransform
   flipped: boolean
+  /** Pinça só redimensiona, sem girar. */
+  rotationLocked: boolean
   locked: boolean
 }

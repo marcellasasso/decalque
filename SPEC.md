@@ -24,6 +24,8 @@ fica sobreposta com opacidade ajustável. Uso pessoal, custo zero, sem App Store
 - R6. Opacidade ajustável por slider, sempre visível — inclusive com a imagem travada.
 - R7. Gestos: mover (1 dedo), redimensionar (pinça), girar (2 dedos).
 - R8. Botão espelhar (inverter na horizontal).
+- R8b. Botão "Sem giro": a pinça só redimensiona, mantendo o ângulo atual.
+- R8c. Botão centralizar: volta a imagem ao centro, tamanho e ângulo originais.
 - R9. Botão travar: desativa os gestos de posicionamento para evitar toques acidentais.
 - R10. Modo preto e branco (liga/desliga).
 
