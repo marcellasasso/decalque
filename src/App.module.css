@@ -1,7 +1,13 @@
 .app {
+  /*
+   * Ocupa a área visível real em vez de usar 100dvh: no app da tela de início,
+   * ao voltar do segundo plano o iOS pode deslocar a área do app sem atualizar
+   * o dvh, e a barra de controles ficava cortada embaixo.
+   */
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  height: 100dvh;
   padding-top: env(safe-area-inset-top);
 }
 
